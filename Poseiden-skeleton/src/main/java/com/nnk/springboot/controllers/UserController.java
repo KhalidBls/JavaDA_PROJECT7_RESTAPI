@@ -1,24 +1,81 @@
 package com.nnk.springboot.controllers;
 
+import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @PostMapping(value = "/user/add")
+    public ResponseEntity<Void> saveUser(@RequestBody User user){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(user.getPassword()));
+        User user1 = userRepository.save(user);
+
+        if(user1 == null)
+            return ResponseEntity.noContent().build();
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("user/{id}")
+                .buildAndExpand(user.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping(value = "user/{id}")
+    public Optional<User> getUserById(@PathVariable int id){
+        return userRepository.findById(id);
+    }
+
+    @PutMapping(value = "user/update/{id}")
+    public User updateUserById(@PathVariable int id, @RequestBody User user){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Optional<User> user1 = userRepository.findById(id);
+
+        if(user1.isPresent()){
+            User userToUpdate = user1.get();
+            userToUpdate.setUsername(user.getUsername());
+            userToUpdate.setPassword(encoder.encode(user.getPassword()));;
+            userToUpdate.setFullname(user.getFullname());
+            userToUpdate.setRole(user.getRole());
+            userRepository.save(userToUpdate);
+            return userToUpdate;
+        }
+        return null;
+    }
+
+    @DeleteMapping(value = "user/delete/{id}")
+    public List<User> deleteUserById(@PathVariable int id){
+        userRepository.deleteById(id);
+        return getAllUser();
+    }
+
+
+    @GetMapping(value = "user/list")
+    public List<User> getAllUser(){
+        return userRepository.findAll();
+    }
+
+
+/*
     @RequestMapping("/user/list")
     public String home(Model model)
     {
@@ -73,4 +130,6 @@ public class UserController {
         model.addAttribute("users", userRepository.findAll());
         return "redirect:/user/list";
     }
+
+ */
 }

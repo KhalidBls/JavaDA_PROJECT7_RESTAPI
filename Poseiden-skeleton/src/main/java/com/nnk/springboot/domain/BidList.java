@@ -16,7 +16,9 @@ public class BidList {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer bidListId;
+    @NotBlank(message = "account is mandatory")
     private String account;
+    @NotBlank(message = "type is mandatory")
     private String type;
     private Double bidQuantity;
     private Double askQuantity;

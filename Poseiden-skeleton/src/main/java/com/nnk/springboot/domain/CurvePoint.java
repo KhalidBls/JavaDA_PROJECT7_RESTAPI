@@ -15,6 +15,7 @@ public class CurvePoint {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @NotNull(message = "must not be null")
     private Integer id;
     private Integer curveId;
     private Timestamp asOfDate;
@@ -22,8 +23,8 @@ public class CurvePoint {
     private Double value;
     private Timestamp creationDate;
 
-    public CurvePoint(Integer id, Double term, Double value) {
-        this.id = id;
+    public CurvePoint(Integer curveId, Double term, Double value) {
+        this.curveId = curveId;
         this.term = term;
         this.value = value;
     }
