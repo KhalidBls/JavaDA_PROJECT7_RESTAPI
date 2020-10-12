@@ -61,7 +61,7 @@ public class CurveController {
     }
 
 
-    @GetMapping(value = "bidList/list")
+    @GetMapping(value = "curvePoint/list")
     public List<CurvePoint> getAllCurvePoint(){
         return curvePointRepository.findAll();
     }

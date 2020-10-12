@@ -1,14 +1,11 @@
 package com.nnk.springboot.controllers;
 
-import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.domain.User;
+import com.nnk.springboot.exceptions.UserNotFoundException;
 import com.nnk.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,10 +19,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PostMapping(value = "/user/add")
-    public ResponseEntity<Void> saveUser(@RequestBody User user){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
+    public ResponseEntity<Void> saveUser(@Valid @RequestBody User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User user1 = userRepository.save(user);
 
         if(user1 == null)
@@ -41,19 +40,21 @@ public class UserController {
     }
 
     @GetMapping(value = "user/{id}")
-    public Optional<User> getUserById(@PathVariable int id){
-        return userRepository.findById(id);
+    public Optional<User> getUserById(@PathVariable int id) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id);
+        if(!user.isPresent()) throw new UserNotFoundException("User with id "+id+" doesnt exist !");
+
+        return user;
     }
 
     @PutMapping(value = "user/update/{id}")
     public User updateUserById(@PathVariable int id, @RequestBody User user){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Optional<User> user1 = userRepository.findById(id);
 
         if(user1.isPresent()){
             User userToUpdate = user1.get();
             userToUpdate.setUsername(user.getUsername());
-            userToUpdate.setPassword(encoder.encode(user.getPassword()));;
+            userToUpdate.setPassword(passwordEncoder.encode(user.getPassword()));;
             userToUpdate.setFullname(user.getFullname());
             userToUpdate.setRole(user.getRole());
             userRepository.save(userToUpdate);

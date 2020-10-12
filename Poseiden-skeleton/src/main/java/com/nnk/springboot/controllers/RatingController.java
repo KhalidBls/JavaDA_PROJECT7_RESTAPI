@@ -64,7 +64,7 @@ public class RatingController {
     }
 
 
-    @GetMapping(value = "bidList/list")
+    @GetMapping(value = "rating/list")
     public List<Rating> getAllRating(){
         return ratingRepository.findAll();
     }
