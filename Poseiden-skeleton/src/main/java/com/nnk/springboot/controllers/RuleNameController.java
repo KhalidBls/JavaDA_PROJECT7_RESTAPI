@@ -22,57 +22,6 @@ public class RuleNameController {
     RuleNameRepository ruleNameRepository;
 
 
-    @PostMapping(value = "/ruleName/add")
-    public ResponseEntity<Void> saveRuleName(@RequestBody RuleName ruleName){
-        RuleName ruleName1 = ruleNameRepository.save(ruleName);
-
-        if(ruleName1 == null)
-            return ResponseEntity.noContent().build();
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("ruleName/{id}")
-                .buildAndExpand(ruleName1.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).build();
-    }
-
-    @GetMapping(value = "ruleName/{id}")
-    public Optional<RuleName> getRuleNameById(@PathVariable int id){
-        return ruleNameRepository.findById(id);
-    }
-
-    @PutMapping(value = "ruleName/update/{id}")
-    public RuleName updateRuleNameById(@PathVariable int id, @RequestBody RuleName ruleName){
-        Optional<RuleName> ruleName1 = ruleNameRepository.findById(id);
-
-        if(ruleName1.isPresent()){
-            RuleName ruleNameToUpdate = ruleName1.get();
-            ruleNameToUpdate.setName(ruleName.getName());
-            ruleNameToUpdate.setDescription(ruleName.getDescription());
-            ruleNameToUpdate.setJson(ruleName.getJson());
-            ruleNameToUpdate.setTemplate(ruleName.getTemplate());
-            ruleNameToUpdate.setSqlStr(ruleName.getSqlStr());
-            ruleNameToUpdate.setSqlPart(ruleName.getSqlPart());
-            ruleNameRepository.save(ruleNameToUpdate);
-            return ruleNameToUpdate;
-        }
-        return null;
-    }
-
-    @DeleteMapping(value = "ruleName/delete/{id}")
-    public List<RuleName> deleteRuleNameById(@PathVariable int id){
-        ruleNameRepository.deleteById(id);
-        return getAllRuleName();
-    }
-
-
-    @GetMapping(value = "ruleName/list")
-    public List<RuleName> getAllRuleName(){
-        return ruleNameRepository.findAll();
-    }
-/*
     @RequestMapping("/ruleName/list")
     public String home(Model model)
     {
@@ -109,6 +58,4 @@ public class RuleNameController {
         // TODO: Find RuleName by Id and delete the RuleName, return to Rule list
         return "redirect:/ruleName/list";
     }
-
-     */
 }

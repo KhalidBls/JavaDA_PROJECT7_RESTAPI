@@ -1,6 +1,5 @@
 package com.nnk.springboot.domain;
 
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -30,6 +29,7 @@ public class User {
         this.fullname = fullname;
         this.role = role;
     }
+
 
     public Integer getId() {
         return id;

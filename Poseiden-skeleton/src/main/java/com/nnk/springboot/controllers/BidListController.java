@@ -22,57 +22,7 @@ public class BidListController {
     @Autowired
     BidListRepository bidListRepository;
 
-
-    @PostMapping(value = "/bidList/add")
-    public ResponseEntity<Void> saveBidList(@RequestBody BidList bidList){
-        BidList bidList1 = bidListRepository.save(bidList);
-
-        if(bidList1 == null)
-            return ResponseEntity.noContent().build();
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("bidList/{id}")
-                .buildAndExpand(bidList1.getBidListId())
-                .toUri();
-
-        return ResponseEntity.created(location).build();
-    }
-
-    @GetMapping(value = "bidList/{id}")
-    public BidList getBidListById(@PathVariable int id){
-        return bidListRepository.findByBidListId(id);
-    }
-
-    @PutMapping(value = "bidList/update/{id}")
-    public BidList updateBidListById(@PathVariable int id, @RequestBody BidList bidList){
-        BidList bidList1 = bidListRepository.findByBidListId(id);
-
-        if(bidList1 != null){
-            bidList1.setAccount(bidList.getAccount());
-            bidList1.setType(bidList.getType());
-            bidList1.setBidQuantity(bidList.getBidQuantity());
-            bidListRepository.save(bidList1);
-        }
-        return bidList1;
-    }
-
-    @DeleteMapping(value = "bidList/delete/{id}")
-    public List<BidList> deleteBidListById(@PathVariable int id){
-        bidListRepository.deleteById(id);
-        return getAllBidList();
-    }
-
-    @GetMapping(value = "bidList/list")
-    public List<BidList> getAllBidList(){
-        return bidListRepository.findAll();
-    }
-
-
-    // CREATION DES ENDPOINT POUR REST API A VOIR S'IL FAUT ENLEVER sa
-
-
-    /*@RequestMapping("/bidList/list")
+@RequestMapping("/bidList/list")
     public String home(Model model)
     {
         // TODO: call service find all bids to show to the view
@@ -107,7 +57,7 @@ public class BidListController {
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Bid by Id and delete the bid, return to Bid list
         return "redirect:/bidList/list";
-    }*/
+    }
 
 
 }
