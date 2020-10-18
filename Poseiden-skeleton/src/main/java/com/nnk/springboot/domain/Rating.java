@@ -8,14 +8,17 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "rating")
 public class Rating {
-    // TODO: Map columns in data table RATING with corresponding java fields
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+    @NotBlank(message = "Moodys Rating is mandatory")
     private String moodysRating;
+    @NotBlank(message = "Sand P Rating is mandatory")
     private String sandPRating;
+    @NotBlank(message = "Fitch Rating is mandatory")
     private String fitchRating;
+    @NotNull(message = "Order is mandatory")
     private Integer orderNumber;
 
     public Rating(String moodysRating, String sandPRating, String fitchRating, Integer orderNumber) {
