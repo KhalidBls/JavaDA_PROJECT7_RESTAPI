@@ -1,6 +1,8 @@
 package com.nnk.springboot.domain;
 
 
+import com.nnk.springboot.validation.UniqueUsername;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -12,6 +14,7 @@ public class User {
     @GeneratedValue
     private Integer id;
     @NotBlank(message = "Username is mandatory")
+    @UniqueUsername
     private String username;
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[-+!*$@%_])([-+!*$@%_\\w]{8,})$",message = "Passwords must contain at least one uppercase letter, at least 8 characters, at least one number and one symbol")
     @NotBlank(message = "Password is mandatory")

@@ -1,6 +1,5 @@
 package com.nnk.springboot;
 
-import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 import org.junit.Assert;
