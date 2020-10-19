@@ -1,20 +1,14 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.repositories.BidListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -40,7 +34,7 @@ public class BidListController {
         if (!result.hasErrors()) {
             bidListRepository.save(bid);
             model.addAttribute("bidLists", bidListRepository.findAll());
-            return "redirect:/curvePoint/list";
+            return "redirect:/bidList/list";
         }
         return "bidList/add";
     }

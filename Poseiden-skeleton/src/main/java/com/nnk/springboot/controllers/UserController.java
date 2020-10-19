@@ -3,7 +3,6 @@ package com.nnk.springboot.controllers;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,8 +15,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @RequestMapping("/user/list")
     public String home(Model model)
@@ -34,7 +31,6 @@ public class UserController {
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.save(user);
             model.addAttribute("users", userService.getAllUsers());
             return "redirect:/user/list";
@@ -56,8 +52,6 @@ public class UserController {
         if (result.hasErrors()) {
             return "user/update";
         }
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setId(id);
         userService.save(user);
         model.addAttribute("users", userService.getAllUsers());
@@ -70,8 +64,6 @@ public class UserController {
         model.addAttribute("users", userService.getAllUsers());
         return "redirect:/user/list";
     }
-
-
 
 
 }
