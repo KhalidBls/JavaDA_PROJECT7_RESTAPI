@@ -34,6 +34,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

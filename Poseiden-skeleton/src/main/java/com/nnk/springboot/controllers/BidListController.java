@@ -26,7 +26,11 @@ public class BidListController {
 
     private final Logger logger = LoggerFactory.getLogger(BidListController.class);
 
-@RequestMapping("/bidList/list")
+
+    /**
+     * Adding all bid to the model then is sending to the view
+     */
+    @RequestMapping("/bidList/list")
     public String home(Model model)
     {
         DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -42,6 +46,10 @@ public class BidListController {
         return "bidList/add";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param bid The bid to validate
+     */
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -52,6 +60,10 @@ public class BidListController {
         return "bidList/add";
     }
 
+    /**
+     * Prepare the field of the bid to update
+     * @param id  The id of the bid to update
+     */
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         BidList bidList = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bidList Id:" + id));
@@ -59,6 +71,10 @@ public class BidListController {
         return "bidList/update";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param bidList The bid to validate
+     */
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
                             BindingResult result, Model model) {
@@ -71,6 +87,10 @@ public class BidListController {
         return "redirect:/bidList/list";
     }
 
+    /**
+     *Delete a bid in the DB
+     * @param id The id of the bid to delete
+     */
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         bidListRepository.deleteById(id);

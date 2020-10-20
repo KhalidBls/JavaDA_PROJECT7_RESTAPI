@@ -21,7 +21,9 @@ public class CurveController {
     @Autowired
     CurvePointRepository curvePointRepository;
 
-
+    /**
+     * Adding all curvePoints to the model then is sending to the view
+     */
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
@@ -34,6 +36,10 @@ public class CurveController {
         return "curvePoint/add";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param curvePoint The bid to validate
+     */
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -44,6 +50,10 @@ public class CurveController {
         return "curvePoint/add";
     }
 
+    /**
+     * Prepare the field of the curve to update
+     * @param id  The id of the cure to update
+     */
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         CurvePoint curvePoint = curvePointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid curve Id:" + id));
@@ -51,6 +61,10 @@ public class CurveController {
         return "curvePoint/update";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param curvePoint The curvePoint to validate
+     */
     @PostMapping("/curvePoint/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                             BindingResult result, Model model) {
@@ -63,6 +77,10 @@ public class CurveController {
         return "redirect:/curvePoint/list";
     }
 
+    /**
+     *Delete a bid in the DB
+     * @param id The id of the curvePoint to delete
+     */
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         curvePointRepository.deleteById(id);

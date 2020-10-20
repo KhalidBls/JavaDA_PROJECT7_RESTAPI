@@ -16,7 +16,9 @@ public class TradeController{
     @Autowired
     TradeRepository tradeRepository;
 
-
+    /**
+     * Adding all trades to the model then is sending to the view
+     */
     @RequestMapping("/trade/list")
     public String home(Model model) {
         model.addAttribute("trades", tradeRepository.findAll());
@@ -28,6 +30,10 @@ public class TradeController{
         return "trade/add";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param trade The bid to validate
+     */
     @PostMapping("/trade/validate")
     public String validate(@Valid Trade trade, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -38,6 +44,10 @@ public class TradeController{
         return "trade/add";
     }
 
+    /**
+     * Prepare the field of the trade to update
+     * @param id  The id of the trade to update
+     */
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         Trade trade = tradeRepository.findByTradeId(id);
@@ -45,6 +55,10 @@ public class TradeController{
         return "trade/update";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param trade The trade to validate
+     */
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid Trade trade,
                              BindingResult result, Model model) {
@@ -57,6 +71,10 @@ public class TradeController{
         return "redirect:/trade/list";
     }
 
+    /**
+     *Delete a trade in the DB
+     * @param id The id of the trade to delete
+     */
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         tradeRepository.deleteById(id);

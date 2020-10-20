@@ -21,7 +21,9 @@ public class RatingController {
     @Autowired
     RatingRepository ratingRepository;
 
-
+    /**
+     * Adding all ratings to the model then is sending to the view
+     */
     @RequestMapping("/rating/list")
     public String home(Model model)
     {
@@ -34,6 +36,10 @@ public class RatingController {
         return "rating/add";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param rating The rating to validate
+     */
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -44,6 +50,10 @@ public class RatingController {
         return "rating/add";
     }
 
+    /**
+     * Prepare the field of the curve to update
+     * @param id  The id of the curve to update
+     */
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         Rating rating = ratingRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid rating Id:" + id));
@@ -51,6 +61,10 @@ public class RatingController {
         return "rating/update";
     }
 
+    /**
+     * Verifying if all fields are OK then save it to the DB
+     * @param rating The bid to validate
+     */
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                                BindingResult result, Model model) {
@@ -63,6 +77,10 @@ public class RatingController {
         return "redirect:/rating/list";
     }
 
+    /**
+     *Delete a bid in the DB
+     * @param id The id of the rating to delete
+     */
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
         ratingRepository.deleteById(id);
